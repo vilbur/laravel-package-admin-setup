@@ -1,51 +1,28 @@
-# AdminSetup Package For Laravel Framework
-Package admin-setup.<br>
-Ready for development and installation.
+# AdminSetup Package For Laravel 5.5
 
-1. [Create folder for package.](#create-folder-for-package)<br>
-2. [Checkout repository.](#checkout-repository)<br>
-3. [Set path for development installation.](#set-path-for-development-installation)<br>
-4. [Install package locally.](#install-package-locally)<br>
+__Web interface for help with deploying of application__<br>
 
 
-### Create folder for package
-application\packages\\__vilbur\admin-setup__
+### Database
+* Drop all tables
 
 
-### Checkout repository
-In folder application\packages\vilbur\admin-setup run command below.
-``` bash
-git init &&git remote add origin https://github.com/vilbur/laravel-package-admin-setup.git &&git pull origin master
-```
+### Migrations
+* Run migrations
 
 
-### Set path for development installation
-Add to __application\composer.json__.
-``` json
-"repositories": {
-    "admin-setup": {
-        "type": "path",
-        "url": "packages/vilbur/admin-setup",
-        "options": {
-            "symlink": true
-        }
-    }
-}
-```
+### Seeding
+* Seed all tables
+* Seed specific table
+* Generate seeds
+
 
 ### Install package
 ``` bash
-composer require vilbur/admin-setup @dev
+composer require vilbur/admin-setup
 ```
 
-### Test in Laravel
+### Interface view
 ``` html
 http://your-domain/admin-setup
 ```
-
-### Search and replace in file contents, filenames and folders
-Run __ContentAndPathReplacer.exe__ and replace "admin-setup" with your package name
-
-
-### Publish package
-php artisan vendor:publish --provider="vilbur\admin-setup\AdminSetupServiceProvider"

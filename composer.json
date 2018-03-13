@@ -1,0 +1,42 @@
+{
+    "name": "vilbur/admin-setup",
+    "type": "library",
+    "description": "AdminSetup for development of packages for Laravel",
+    "keywords": [
+        "vilbur",
+        "AdminSetup"
+    ],
+    "homepage": "https://github.com/vilbur/laravel-package-admin-setup",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": ":vilbur",
+            "email": "cerny.vil@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Vilbur\\AdminSetup\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vilbur\\AdminSetup\\": "tests/"
+        }
+    },
+    "extra": {
+		"laravel": {
+            "providers": [
+                "Vilbur\\AdminSetup\\Providers\\AdminSetupServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
