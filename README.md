@@ -19,7 +19,7 @@ __Web interface for help with deploying of application__<br>
 
 ### Install package
 ``` bash
-composer require vilbur/admin-setup
+composer require vilbur/admin-setup @dev
 ```
 
 ### Interface view
