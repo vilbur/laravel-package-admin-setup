@@ -44,7 +44,7 @@ class DatabaseService {
 		//return ['CompanyTableSeeder', 'DatabaseSeeder'];
 		$file_names	= [];
 		$files 	= Finder::create()
-						->in( base_path('database\seeds') )
+						->in( base_path('database/seeds') )
 						->depth('== 0')
 						->notName('DatabaseSeeder.php')
 						->name('*.php');
