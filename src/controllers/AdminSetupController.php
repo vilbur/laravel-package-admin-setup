@@ -34,7 +34,7 @@ class AdminSetupController extends Controller {
 	public function migrate()
 	{
 		$this->DatabaseService->migrate();
-		return 'All tables are dropped';
+		return 'All tables are migrated';
 		//return  \Redirect::back();
 	}
 
