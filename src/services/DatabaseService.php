@@ -51,6 +51,8 @@ class DatabaseService {
 
 		foreach($files as $file)
 			$file_names[] = basename($file->getFileName(), '.php' );
+		
+		sort($file_names);
 
 		return $file_names;
 	}
