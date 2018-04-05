@@ -6,6 +6,16 @@
 		<title>Admin setup</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 		<style>
+			body{
+				background-color:#2B2B2B;
+				color: white;
+			}
+			.title{
+				color: white;				
+			}
+			a{
+				color: #16B7F7;
+			}
 			input[type="checkbox"]{
 				-webkit-transform: scale(1.5); /* Safari and Chrome */
 				margin-right: 15px;
@@ -13,7 +23,20 @@
 			ul li {
 			  list-style-type: none;
 			}
-
+			label[for$="DatabaseSeeder"]{
+				color:yellow !important;
+				font-weight: bold;
+			}
+			label[for="DatabaseSeeder"]{
+				color:orange !important;
+				font-weight: bold;
+			}
+			label[for$="FakerSeeder"]{
+				color:cyan !important;
+			}
+			label[for$="TableSeeder"]{
+				color:lightgreen !important;
+			}
 		</style>
 	</head>
 	<body>
