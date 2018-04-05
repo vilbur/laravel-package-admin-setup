@@ -20,6 +20,8 @@
 		<div id="root">
 			<section class="section">
 				<div class="container">
+				
+					<h2 class="title is-2 has-text-centered">Environment: {{ \App::environment() }}</h2>
 
 					<div class="columns is-mobile">
 						<div class="column is-6">
