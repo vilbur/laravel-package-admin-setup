@@ -70,7 +70,7 @@ class DatabaseService {
 	public function seedTables( $seeders )
 	{
 		foreach($seeders as $seeder)
-			\Artisan::call('db:seed', ['--class' => $seeder] );
+			\Artisan::call('db:seed', ['--class' => $seeder, "--force" => true] );
 	}
 	/** Generate seed files for tables
 	 *
