@@ -1,98 +1,169 @@
-<?php namespace Vilbur\AdminSetup\Services;
-use Cache;
-use Symfony\Component\Finder\Finder;
+<?php namespace Vilbur\AdminSetup\Controllers;
 
-/**
-*  Common work with datbase
-**/
-
-class DatabaseService {
-
-	//public $modelName;
-	//public $model;
-	//public $id;
-	//public $parentModelName;
-	//public $parentModel;
-	//public $seeder_class;
+use App\Http\Controllers\Controller;
+//use Vilbur\AdminSetup\Models\AdminSetup;
+use Vilbur\AdminSetup\Services\DatabaseService;
 
 
-	/**  Migrate tables
-	 */
-	public function migrate(){
-		if(!\Schema::hasTable("migrations"))
-			\Artisan::call("migrate:install");
+class AdminSetupController extends Controller {
 
-		\Artisan::call("migrate", ["--force" => true]);
+	/**
+	* CONSTRUCT
+	**/
+	public function __construct( DatabaseService $DatabaseService ){
+		$this->DatabaseService = $DatabaseService;
+
 	}
 
-	/** Drop all tables
-	 */
-	public function dropAllTables(){
-		$tables = array_reverse( $this->getTables() );
-		/*    run twice because of foreign keys    */
-		for( $t=0;$t  < 2;$t++ ) {
-			foreach ( $tables as $table )
-				try {
-					\Schema::drop( $table ) ;
-				} catch ( \Exception $e) { }
-		}
+
+    public function testView() {
+		return \View::make('AdminSetup::view');
 	}
-	/** get Seeders
+
+	/** Drop All Tables
 	 */
+	public function dropAllTables()
+	{
+		$this->DatabaseService->dropAllTables();
+		return 'All tables are dropped';
+		//return  \Redirect::back();
+	}
+	/**
+	*/
+	public function refreshDatabase($seeders=null)
+	{
+		$this->dropAllTables();
+		$this->migrate();
+		$this->seed($seeders);		
+
+		return 'Database refreshed';	
+	} 
+
+	/** Migrate tables
+	 */
+	public function migrate()
+	{
+		$this->DatabaseService->migrate();
+		return 'All tables are migrated';
+		//return  \Redirect::back();
+	}
+
+	/** Seed tables
+	 *
+	 *  @param string $seeders class names of seeders E.G: 'RolesTablesSeeder,UserAdminTableSeeder'
+	 */
+	public function seed($seeders=null)
+	{
+		if( ! $seeders )
+			return 'Seeder is not defined';
+			
+		$this->DatabaseService->seedTables( explode ( ',', $seeders ) );
+
+		return 'All tables are seeded';
+	}
+
+	/**  Generate seed files
+	 *
+	 *  @param string $table_names names of tables E.G: 'users,roles'
+	 */
+	public function seeedGenerate( $table_names )
+	{
+		$this->DatabaseService->generateSeeds( $table_names );
+
+		return 'Seeds generated';
+	}
+	/** get Seeder class names
+	*/
 	public function getSeeders()
 	{
-		//return ['CompanyTableSeeder', 'DatabaseSeeder'];
-		$file_names	= ['DatabaseSeeder'];
-		$files 	= Finder::create()
-						->in( base_path('database/seeds') )
-						->depth('== 0')
-						->notName('DatabaseSeeder.php')
-						->name('*.php');
-
-		foreach($files as $file)
-			$file_names[] = basename($file->getFileName(), '.php' );
-		
-		return $file_names;
+		return $this->DatabaseService->getSeeders();
 	}
-	/** Seed all tables
-	 */
-	public function seedAll()
-	{
-		\Artisan::call('db:seed', ['--force' => true]);
-		\Artisan::call('cache:clear');
-	}
-	/** seed specific table
-	 *
-	 *  @param array $seeders class names of seeders
-	 */
-	public function seedTables( $seeders )
-	{
-		foreach($seeders as $seeder)
-			\Artisan::call('db:seed', ['--class' => $seeder] );
-	}
-	/** Generate seed files for tables
-	 *
-	 * 	REQUIRED PACKAGE: https://github.com/orangehill/iseed
-	 *
-	 *  @param array $table_names class names
-	 */
-	public function generateSeeds( $table_names )
-	{
-		\Artisan::call('iseed', ['tables' => $table_names] );
-	}
-
-	/** get tables
-	 */
+	/** get Tables names
+	*/
 	public function getTables()
 	{
-		$tables = [];
-		foreach ( \DB::select('SHOW TABLES') as $key => $table ){
-			$data	= get_object_vars( $table );
-			$tables[]	= $data[key( $data )];
-		}
-		return $tables;
+		return $this->DatabaseService->getTables();
 	}
+	/**
+	* Truncate Tables
+	*
+	*
+	**/
+	public function truncateTables( $table_names ){
 
+		$this->DatabaseService->truncateTables( explode ( ',', $table_names ));
+		return "Tables $table_names truncated";
+	}
+	///**
+	//* MIGRATE ALL TABLES
+	//*
+	//*
+	//**/
+	//public function getMigrateAll(){
+	//	$this->DatabaseService->migrateAll();
+	//	return  \Redirect::back();
+	//}
+	//
+	///**
+	//* CREATE SEED FILES OF ALL TABLES
+	//**/
+	//public function getSeedAll(){
+	//	$this->DatabaseService->seedAll();
+	//	return \Redirect::back();
+	//}
+	//
+	///**
+	//* createAllSeedFiles
+	//**/
+	//public function createAllSeedFiles(){
+	//	$this->DatabaseService->createAllSeedFiles();
+	//	return  \Redirect::back();
+	//}
+	//
+	///**
+	//* delete All Tables
+	//**/
+	//public function getDeleteAllTables(){
+	//	$this->DatabaseService->deleteAllTables();
+	//	return  \Redirect::back();
+	//}
+	//
+	///*
+	//* CLEAR APP CACHE
+	//*/
+	//public function getClearCache(){
+	//	\Artisan::call('cache:clear');
+	//	return  \Redirect::back();
+	//}
+	//
+	///**
+	//* SEED SPECIFIC TABLE
+	//*
+	//*
+	//**/
+	//public function getSeedTable(  ){
+	//	$this->DatabaseService->seedTable();
+	//	return  \Redirect::back();
+	//}
+	//
+	///**
+	//* CREATE SEED FILE OF SPECIFIC TABLE
+	//**/
+	//public function getCreateSeedFile(  ){
+	//	$this->DatabaseService->createSeedFile();
+	//	return  \Redirect::back();
+	//}
+
+	//
+	///**
+	//* resetid
+	//*
+	//*
+	//**/
+	//public function getResetid(){
+	//	$this->DatabaseService->resetid();
+	//	return  \Redirect::back();
+	//}
 
 
 }

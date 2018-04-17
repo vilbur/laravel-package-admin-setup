@@ -5,16 +5,22 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Admin setup</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@1.0.14/bulma-tooltip/dist/bulma-tooltip.min.css">		
 		<style>
 			body{
 				background-color:#2B2B2B;
 				color: white;
 			}
 			.title{
-				color: white;				
+				color: white;
+				margin: 0.5em 0 0.2em 0 !important;
+				border-bottom:	1px solid white ;
 			}
 			a{
 				color: #16B7F7;
+			}
+			a:hover{
+				color: orange;
 			}
 			input[type="checkbox"]{
 				-webkit-transform: scale(1.5); /* Safari and Chrome */
@@ -57,7 +63,7 @@
 
 					<admin-section label="Tables">
 						<admin-link route="drop-all-tables" >Drop all tables</admin-link>
-						<admin-link route="truncate-tables" list="tables" >Truncate selected tables</admin-link>
+						<admin-link route="truncate-tables" list="tables" >Truncate tables</admin-link>
 					</admin-section>
 
 					<admin-section label="Migrations">
@@ -65,11 +71,16 @@
 					</admin-section>
 
 					<admin-section label="Seeding">
-						<admin-link route="seed" >Seed all tables</admin-link>
-						<admin-link route="seed" list="seeders" >Seed selected Seeders</admin-link>
-						<admin-link route="seed-generate" list="tables" >Generate seeds for selected tables</admin-link>
+						<admin-link route="seed" list="seeders" >Seed</admin-link>
+						<admin-link route="seed-generate" list="tables" >Generate Seeders</admin-link>
 					</admin-section>
-
+						
+					<admin-section label="Database">
+						<admin-link route="database/refresh" list="seeders" class="tooltip is-tooltip-multiline"
+									data-tooltip="Drop all tables, migrate and seed selected seeders or DatabaseSeeder if nothing selected."
+						>Refresh database</admin-link>
+					</admin-section>
+						
 					<admin-section label="Cache">
 						<admin-link route="cache-clear" >Clear cache</admin-link>
 					</admin-section>
@@ -81,6 +92,7 @@
 	<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-bulma-tooltip@1.0.4/src/index.min.js"></script>		
 	<script>
 
 		Vue.component('admin-section', {
@@ -119,8 +131,13 @@
 					return list && this.$root.$refs[list].selected.length > 0 ? this.$root.$refs[list].selected : [];
 				},
 				confirmLink(){
-					var selected_items	= this.getSelectedItems( event.target.dataset.list );
-					var answer	= confirm ('Do You want\n\n    ' + event.target.innerHTML + ' ?' + ( selected_items.length > 0 ? '\n\n    '+selected_items.join('\n    ') : '' ) );
+					var list	= event.target.dataset.list
+					var selected_items	= this.getSelectedItems( list );
+					
+					if( list=='seeders' && selected_items.length == 0 )
+						selected_items = ['DatabaseSeeder']
+					
+					var answer	= confirm ( event.target.innerHTML + ' ?' + ( selected_items.length > 0 ? '\n\n    '+selected_items.join('\n    ') : '' ) );
 					if (answer)
 						window.open( '/admin-setup/'+event.target.dataset.route + ( selected_items.length > 0 ? '/'+selected_items.join() : '' ) , "_blank")
 

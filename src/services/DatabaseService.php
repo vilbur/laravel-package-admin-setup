@@ -6,19 +6,12 @@ use Symfony\Component\Finder\Finder;
 *  Common work with datbase
 **/
 
-class DatabaseService {
-
-	//public $modelName;
-	//public $model;
-	//public $id;
-	//public $parentModelName;
-	//public $parentModel;
-	//public $seeder_class;
-
-
+class DatabaseService
+{
 	/**  Migrate tables
 	 */
-	public function migrate(){
+	public function migrate()
+	{
 		if(!\Schema::hasTable("migrations"))
 			\Artisan::call("migrate:install");
 
@@ -26,11 +19,12 @@ class DatabaseService {
 	}
 
 	/** Drop all tables
+	 *  Loop while all tables are dropped because of relationship tables can be dropped at once
 	 */
-	public function dropAllTables(){
-		$tables = array_reverse( $this->getTables() );
-		/*    run twice because of foreign keys    */
-		for( $t=0;$t  < 2;$t++ ) {
+	public function dropAllTables()
+	{
+		while($tables = array_reverse( $this->getTables() ))
+		{
 			foreach ( $tables as $table )
 				try {
 					\Schema::drop( $table ) ;
@@ -56,9 +50,9 @@ class DatabaseService {
 
 		return $file_names;
 	}
-	/** Seed all tables
+	/** Seed DatabaseSeeder
 	 */
-	public function seedAll()
+	public function seed()
 	{
 		\Artisan::call('db:seed', ['--force' => true]);
 		\Artisan::call('cache:clear');
