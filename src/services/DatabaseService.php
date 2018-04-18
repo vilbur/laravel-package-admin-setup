@@ -74,7 +74,7 @@ class DatabaseService
 	 */
 	public function generateSeeds( $table_names )
 	{
-		\Artisan::call('iseed', ['tables' => $table_names] );
+		\Artisan::call('iseed', ['tables' => $table_names, "--force" => true] );
 	}
 
 	/** get tables
