@@ -18,6 +18,9 @@ Route::get('/admin-setup/seed-generate/{table_names}', 'Vilbur\AdminSetup\Contro
 
 Route::get('/admin-setup/cache-clear', function(){
 	\Artisan::call('cache:clear');
+	\Artisan::call('view:clear');
+	\Artisan::call('config:clear');
+	\Artisan::call('route:clear');
 });
 
 Route::get('/admin-setup/truncate-tables/{table_names}', 'Vilbur\AdminSetup\Controllers\AdminSetupController@truncateTables' );
